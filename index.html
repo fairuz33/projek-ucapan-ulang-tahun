@@ -8,7 +8,10 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #111; /* Latar belakang gelap */
+            /* Latar belakang gradien animasi */
+            background: linear-gradient(-45deg, #0a0a0a, #2a0018, #1c0024, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
             color: white;
             font-family: 'Arial', sans-serif;
             display: flex;
@@ -17,6 +20,12 @@
             height: 100vh;
             overflow: hidden;
             text-align: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .screen {
@@ -34,34 +43,45 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         /* Styling Hitung Mundur */
         #countdown {
             font-size: 8rem;
-            color: #ff69b4; /* Warna pink */
+            color: #ff69b4;
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
         }
 
         /* Styling Ucapan */
         #greeting h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin: 0;
             color: #ff69b4;
         }
         #greeting h2 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             margin: 10px 0;
             color: #fff;
+            letter-spacing: 2px;
+        }
+        
+        /* Styling Paragraf Ucapan */
+        .message-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 80%;
+            margin-top: 20px;
+            color: #dddddd;
         }
 
         /* Styling GIF */
         #gif-section img {
             max-width: 80%;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
         }
 
         /* Styling Galeri Foto */
@@ -74,7 +94,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             max-width: 400px;
-            margin: 0 auto;
+            margin: 20px auto 0;
         }
         .photo-grid img {
             width: 100%;
@@ -95,21 +115,22 @@
     <!-- Layar 2: Ucapan Selamat -->
     <div id="screen-greeting" class="screen">
         <h1>Happy Birthday</h1>
-        <!-- GANTI NAMA DI BAWAH INI -->
-        <h2>fairus</h2> 
+        <h2>ANITA</h2> 
+        <!-- PARAGRAF UCAPAN -->
+        <p class="message-text">
+            Selamat bertambah usia! Semoga tahun ini membawa lebih banyak kebahagiaan, kesehatan, dan keberhasilan untukmu. Terima kasih sudah menjadi sosok yang luar biasa. Nikmati hari spesialmu!
+        </p>
     </div>
 
     <!-- Layar 3: GIF Lucu -->
-    <div id="screen-gif" class="screen">
-        <!-- GANTI URL GIF DI BAWAH INI DENGAN LINK GIF ANDA -->
+    <div id="screen-gif" class="screen" id="gif-section">
         <img src="https://media.giphy.com/media/l4KibWpBGWchSqCRy/giphy.gif" alt="Funny Birthday GIF">
     </div>
 
     <!-- Layar 4: Galeri Foto -->
-    <div id="screen-gallery" class="screen">
+    <div id="screen-gallery" class="screen" id="gallery">
         <h2>Our Memories</h2>
         <div class="photo-grid">
-            <!-- GANTI URL GAMBAR DI BAWAH INI DENGAN FOTO-FOTO ANDA -->
             <img src="https://via.placeholder.com/150/ff69b4/ffffff?text=Foto+1" alt="Foto 1">
             <img src="https://via.placeholder.com/150/ff69b4/ffffff?text=Foto+2" alt="Foto 2">
             <img src="https://via.placeholder.com/150/ff69b4/ffffff?text=Foto+3" alt="Foto 3">
@@ -118,7 +139,6 @@
     </div>
 
     <script>
-        // Logika Hitung Mundur dan Transisi Layar
         let count = 3;
         const countdownElement = document.getElementById('countdown');
         const screenCountdown = document.getElementById('screen-countdown');
@@ -126,34 +146,33 @@
         const screenGif = document.getElementById('screen-gif');
         const screenGallery = document.getElementById('screen-gallery');
 
-        // Fungsi untuk mengganti layar aktif
         function switchScreen(hideScreen, showScreen) {
             hideScreen.classList.remove('active');
             showScreen.classList.add('active');
         }
 
-        // Timer hitung mundur
         const countdownInterval = setInterval(() => {
             count--;
             if (count > 0) {
                 countdownElement.innerText = count;
             } else {
                 clearInterval(countdownInterval);
-                // Pindah ke layar Ucapan
+                
+                // Transisi 1: Ke Layar Ucapan
                 switchScreen(screenCountdown, screenGreeting);
                 
-                // Tunggu 3 detik, lalu pindah ke layar GIF
+                // Transisi 2: Ke Layar GIF (Waktu diperpanjang menjadi 8 detik agar paragraf terbaca)
                 setTimeout(() => {
                     switchScreen(screenGreeting, screenGif);
                     
-                    // Tunggu 4 detik lagi, lalu pindah ke Galeri Foto
+                    // Transisi 3: Ke Layar Galeri Foto (setelah 4 detik tayang GIF)
                     setTimeout(() => {
                         switchScreen(screenGif, screenGallery);
-                    }, 4000); // Waktu tampil GIF
+                    }, 4000); 
                     
-                }, 3000); // Waktu tampil Ucapan
+                }, 8000); // 8000 milidetik = 8 detik
             }
-        }, 1000); // Interval hitung mundur 1 detik
+        }, 1000);
     </script>
 </body>
 </html>
